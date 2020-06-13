@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component, Fragment, useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 
 import Burger from '../../components/Burger/Burger';
@@ -10,6 +10,11 @@ import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler';
 import * as actions from '../../store/actions/index';
 import axios from '../../axios-orders';
 
+const BurgerBuildr = props => {
+    const { purchasing, setPurchasing } = useState(false);
+
+};
+
 class BurgerBuilder extends Component {
     // constructor(props) {
     //     super(props);
@@ -19,24 +24,24 @@ class BurgerBuilder extends Component {
         purchasing: false
     }
 
-    componentDidMount () {
+    componentDidMount() {
         this.props.onInitIngredients();
     }
 
-    updatePurchaseState ( ingredients ) {
-        const sum = Object.keys( ingredients )
-            .map( igKey => {
+    updatePurchaseState(ingredients) {
+        const sum = Object.keys(ingredients)
+            .map(igKey => {
                 return ingredients[igKey];
-            } )
-            .reduce( ( sum, el ) => {
+            })
+            .reduce((sum, el) => {
                 return sum + el;
-            }, 0 );
+            }, 0);
         return sum > 0;
     }
 
     purchaseHandler = () => {
         if (this.props.isAuthenticated) {
-            this.setState( { purchasing: true } );
+            this.setState({ purchasing: true });
         } else {
             this.props.onSetAuthRedirectPath('/checkout');
             this.props.history.push('/auth');
@@ -44,7 +49,7 @@ class BurgerBuilder extends Component {
     }
 
     purchaseCancelHandler = () => {
-        this.setState( { purchasing: false } );
+        this.setState({ purchasing: false });
     }
 
     purchaseContinueHandler = () => {
@@ -52,17 +57,17 @@ class BurgerBuilder extends Component {
         this.props.history.push('/checkout');
     }
 
-    render () {
+    render() {
         const disabledInfo = {
             ...this.props.ings
         };
-        for ( let key in disabledInfo ) {
+        for (let key in disabledInfo) {
             disabledInfo[key] = disabledInfo[key] <= 0
         }
         let orderSummary = null;
         let burger = this.props.error ? <p>Ingredients can't be loaded!</p> : <Spinner />;
 
-        if ( this.props.ings ) {
+        if (this.props.ings) {
             burger = (
                 <Fragment>
                     <Burger ingredients={this.props.ings} />
@@ -113,4 +118,4 @@ const mapDispatchToProps = dispatch => {
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(withErrorHandler( BurgerBuilder, axios ));
+export default connect(mapStateToProps, mapDispatchToProps)(withErrorHandler(BurgerBuilder, axios));
