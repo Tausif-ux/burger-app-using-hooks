@@ -1,4 +1,4 @@
-import React, { Component, useEffect } from 'react';
+import React, {useEffect} from 'react';
 import { connect } from 'react-redux';
 
 import Order from '../../components/Order/Order';
@@ -47,3 +47,4 @@ const mapDispatchToProps = dispatch => {
 };
 
 export default connect( mapStateToProps, mapDispatchToProps )( withErrorHandler( Orders, axios ) );
+
