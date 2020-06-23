@@ -9,7 +9,7 @@ import classes from './Auth.css';
 import * as actions from '../../store/actions/index';
 import { updateObject, checkValidity } from '../../shared/utility';
 import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler';
-import axios from '../../axios-orders';
+import { axiosForAuthReq } from '../../axios-orders';
 
 
 
@@ -49,12 +49,14 @@ const Auth = props => {
 
     const { buildingBurger, authRedirectPath } = props;
 
-    //Will check for 
+    
+    const { onSetAuthRedirectPath } = props;
+    //Will check for
     useEffect(() => {
         if (!buildingBurger && authRedirectPath !== '/') {
-            props.onSetAuthRedirectPath();
+            onSetAuthRedirectPath();
         }
-    }, [buildingBurger, authRedirectPath]);
+    }, [buildingBurger, authRedirectPath, onSetAuthRedirectPath]);
 
     const inputChangedHandler = (event, controlName) => {
         const updatedControls = updateObject(controls, {
@@ -147,4 +149,4 @@ const mapDispatchToProps = dispatch => {
     };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(withErrorHandler(Auth, axios));
+export default connect(mapStateToProps, mapDispatchToProps)(withErrorHandler(Auth, axiosForAuthReq));
